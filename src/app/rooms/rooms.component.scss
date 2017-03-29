@@ -1,9 +1,11 @@
 :host {
-    display: block;
-    padding: 0.25em;
-    margin: 0;
-    &:after {
-        content: " ";
-        clear: both;
-    }
+  display: flex;
+  flex-grow: 1;
+  margin: 0;
+}
+
+.app-window {
+  display: flex;
+  flex-grow: 1;
+  background: #E4E8F0;
 }

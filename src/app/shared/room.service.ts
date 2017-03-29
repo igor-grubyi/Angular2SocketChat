@@ -19,29 +19,32 @@ export class RoomService {
         this.socketService
             .get("room")
             .subscribe(
-                (socketItem: ISocketItem) => {
-                    let room: IRoom = socketItem.item;
-                    let index: number = this.findIndex(room.name);
-                    if (socketItem.action === "remove") {
-                        // Remove
-                        this.list = this.list.delete(index);
+            (socketItem: ISocketItem) => {
+                let room: IRoom = socketItem.item;
+                let index: number = this.findIndex(room.name);
+                if (socketItem.action === "remove") {
+                    // Remove
+                    this.list = this.list.delete(index);
+                } else {
+                    if (index === -1) {
+                        // Create
+                        this.list = this.list.push(room);
                     } else {
-                        if (index === -1) {
-                            // Create
-                            this.list = this.list.push(room);
-                        } else {
-                            // Update
-                            this.list = this.list.set(index, room)
-                        }
+                        // Update
+                        this.list = this.list.set(index, room)
                     }
-                    this.rooms.next(this.list);
-                },
-                error => console.log(error)
+                }
+                this.rooms.next(this.list);
+            },
+            error => console.log(error)
             );
     }
 
     // Join room
     join(name: string): void {
+        if (this.userService.currentRoom) {
+            this.leave(this.userService.currentRoom.name);
+        }
         for (let roomIndex in this.userService.rooms) {
             let room = this.userService.rooms[roomIndex];
             if (room.name === name) {
@@ -52,6 +55,7 @@ export class RoomService {
         if (index !== -1) {
             let room = this.list.get(index);
             this.userService.rooms.push(room);
+            this.userService.currentRoom = room;
         }
     }
 

@@ -1,11 +1,116 @@
 :host {
-    display: block;
-    background-color: chocolate;
-    padding: 0.5em;
-    margin: 0;
+  display: flex;
+  width: 260px;
 }
 
-span {
+.left-panel {
+  background: #254472;
+  color: #9BB3DB;
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 3px;
+    background-color: #4d73ac;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
+  }
+  &__username {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.2px;
+    text-align: center;
+    color: #ffffff;
+  }
+  &__user-arrow {
+    font-size: 16px;
+  }
+  &__user-data {
+    display: flex;
+    align-items: center;
+  }
+  &__abreviation {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.9px;
+    text-align: center;
+    color: #ffffff;
+  }
+  &__chat-type {
+    display: flex;
+  }
+  &__rooms-chat,
+  &__recent-chat {
+    height: 42px;
+    background-color: #1d3963;
+    width: 130px;
+    border: none;
+    color: #7796cc;
+    cursor: pointer;
+    &:hover {
+      color: #fff;
+    }
+    &.--active {
+      border-bottom: 3px solid #00a8ff;
+      color: #fff;
+    }
+  }
+  &__rooms-switch {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.1px;
+    color: #7796cc;
+    padding: 30px 10px 0;
+    &-arrow {
+      font-size: 11px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+    }
+    &:hover {
+      color: white;
+    }
+  }
+  &__divider {
+    width: 237px;
+    height: 1px;
+    border-bottom: solid 1px #2f5285;
+    margin: 5px 0;
+  }
+  &__rooms-list {
+    list-style: none;
     padding: 0;
-    margin: 0 3em 0 0;
+    margin: 10px 0;
+  }
+  &__room-item {
+    cursor: pointer;
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.1px;
+    padding: 5px 25px;
+    &:hover {
+      color: white;
+    }
+  }
 }

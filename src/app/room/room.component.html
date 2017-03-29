@@ -1,19 +1,45 @@
-<div class="box">
-    <button class="leave" (click)="leave(room)">leave</button>
-    <h1>
-        {{room.name}}
-    </h1>
-    <h2>Created: {{room.created}}</h2>
-    <div class="messages" #scroll>
-        <div class="message" *ngFor="let item of messages | orderBy:'created':false">
-            <span class="dimmed">{{item.created}}</span>
-            &lt;{{item.from}}&gt;
-            {{item.message}}
+<div class="chat-window">
+  <!--<button class="leave" (click)="leave(room)">leave</button>-->
+  <div class="chat-window__header">
+    <span class="chat-window__room-name">
+      {{room.name}}
+    </span>
+    <!--<h2>Created: {{room.created}}</h2>-->
+  </div>
+
+
+  <div class="chat-window__messages" #scroll>
+    <div class="chat-window__message" *ngFor="let item of messages">
+
+
+
+      <div class="chat-window__message-content" *ngIf="!isOwnMessage(item.from)">
+        <div class="chat-window__message-info">
+          <span class="chat-window__from-user">{{item.from}}</span>
+          <span class="chat-window__message-time">{{item.created | date: shortTime}}</span>
         </div>
+        <div class="chat-window__message-body">
+          <div class="chat-window__avatar" [colorHash]="item.from">
+            <span class="chat-window__abreviation">
+              {{item.from | capitalizeFirst}}
+            </span>
+          </div>
+          <div class="chat-window__message-bubble">{{item.message}}</div>
+        </div>
+      </div>
+
+      <div class="chat-window__message-content --own" *ngIf="isOwnMessage(item.from)">
+        <div class="chat-window__message-body">
+          <span class="chat-window__message-time">{{item.created | date: shortTime}}</span>
+          <div class="chat-window__message-bubble">{{item.message}}</div>
+        </div>
+      </div>
     </div>
-    <h3>
-        &lt;{{userService.nickname}}&gt;
-        <input #focus [(ngModel)]="message" (keypress)="eventHandler($event)">
-        <button (click)="send()">Send</button>
-    </h3>
-</div>
+  </div>
+
+  <div class="chat-window__footer">
+    <div class="chat-window__send-form">
+      <input class="chat-window__message-input" #focus [(ngModel)]="message" placeholder="Send to {{room.name}}" (keypress)="eventHandler($event)">
+      <button class="chat-window__message-submit-button" (click)="send()">Send</button>
+    </div>
+  </div>

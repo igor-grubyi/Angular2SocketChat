@@ -15,6 +15,12 @@ import { NicknameComponent } from "./nickname";
 import { RoomComponent } from "./room";
 import { RoomsComponent } from "./rooms";
 
+// Pipes
+import { CapitalizeFirstPipe } from './pipes/first-letter-pipe';
+
+// Directives
+import { ColorHashDirective } from './directives/color-hash.directive';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -27,7 +33,9 @@ import { RoomsComponent } from "./rooms";
         ControlComponent,
         NicknameComponent,
         RoomComponent,
-        RoomsComponent
+        RoomsComponent,
+        CapitalizeFirstPipe,
+        ColorHashDirective
     ],
     bootstrap: [
         AppComponent

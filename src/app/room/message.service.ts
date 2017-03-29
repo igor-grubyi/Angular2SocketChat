@@ -26,6 +26,7 @@ export class MessageService {
 
     // Emit message using socket service
     create(from: string, message: string): void {
+        console.log("Sent Message")
         this.socketService.socket.emit("create", {
             room: this.room,
             created: new Date(),

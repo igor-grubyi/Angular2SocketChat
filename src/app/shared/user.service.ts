@@ -6,6 +6,7 @@ import { IRoom } from "../../models";
 export class UserService {
     nickname: string = "";
     rooms: IRoom[] = [];
+    currentRoom: IRoom;
 
     constructor() {}
 }

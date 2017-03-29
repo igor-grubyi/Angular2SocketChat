@@ -1,4 +1,4 @@
-<span>
+<!--<span>
     <select [(ngModel)]="room">
         <option value="">Select room...</option>
         <option *ngFor="let room of roomService.rooms | async" [value]="room.name">{{room.name}}</option>
@@ -10,4 +10,56 @@
     New room:
     <input [(ngModel)]="newRoom" (keypress)="eventHandler($event)">
     <button (click)="create()">Create</button>
-</span>
+</span>-->
+
+
+<div class="left-panel">
+  <!--<span>
+    New room:
+    <input [(ngModel)]="newRoom" (keypress)="eventHandler($event)">
+    <button (click)="create()">Create</button>
+  </span>-->
+  <div class="left-panel__user-data">
+    <div class="left-panel__avatar" [colorHash]="'violet'">
+      <span class="left-panel__abreviation">
+        {{username | capitalizeFirst}}
+      </span>
+    </div>
+    <div class="left-panel__username">
+      {{username}}
+      <i class="material-icons left-panel__user-arrow">keyboard_arrow_down</i>
+    </div>
+
+  </div>
+  <div class="left-panel__chat-type">
+    <button class="left-panel__rooms-chat --active">
+      Rooms
+    </button>
+    <button class="left-panel__recent-chat">
+      Recent
+    </button>
+  </div>
+  <div class="left-panel__rooms-switch" (click)="toggleRoomsSwitch()">
+    <i class="material-icons left-panel__rooms-switch-arrow" *ngIf="showRooms">keyboard_arrow_down</i>
+    <i class="material-icons left-panel__rooms-switch-arrow" *ngIf="!showRooms">keyboard_arrow_up</i>
+    <span>Rooms</span>
+    <div class="left-panel__divider"></div>
+  </div>
+  <ul class="left-panel__rooms-list" *ngIf="showRooms">
+    <li class="left-panel__room-item" *ngFor="let room of roomService.rooms | async" (click)="join(room.name)">
+      <span>{{room.name}}</span>
+      <!--<i class="material-icons left-panel__delete-button" (click)="remove()">delete</i>-->
+  </ul>
+
+  <div class="left-panel__rooms-switch" (click)="toggleDirectSwitch()">
+    <i class="material-icons left-panel__rooms-switch-arrow" *ngIf="showRooms">keyboard_arrow_down</i>
+    <i class="material-icons left-panel__rooms-switch-arrow" *ngIf="!showRooms">keyboard_arrow_up</i>
+    <span>Direct</span>
+    <div class="left-panel__divider"></div>
+  </div>
+  <ul class="left-panel__rooms-list" *ngIf="showDirect">
+    <li class="left-panel__room-item" *ngFor="let room of roomService.rooms | async" (click)="join(room.name)">
+      <span>{{room.name}}</span>
+      <!--<i class="material-icons left-panel__delete-button" (click)="remove()">delete</i>-->
+  </ul>
+</div>

@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 
-import { RoomService } from "../shared";
+import { RoomService, UserService } from "../shared";
 
 import { IRoom } from "../../models";
 
@@ -15,14 +15,36 @@ const template: string = require("./control.component.html");
 })
 
 export class ControlComponent {
+    rooms: IRoom[];
     room: string = "";
     newRoom: string = "";
+    showRooms: boolean = true;
+    showDirect: boolean = true;
+    username: string;
 
-    constructor(public roomService: RoomService) {}
+    constructor(private zone: NgZone, public roomService: RoomService, public userService: UserService) { }
+
+    // Handle keypress event, for saving nickname
+    ngOnInit(): void {
+        this.roomService.rooms.subscribe(rooms => {
+            this.zone.run(() => {
+                this.rooms = rooms;
+            });
+        });
+        this.username = this.userService.nickname;
+    }
+
+    toggleRoomsSwitch(): boolean {
+        return this.showRooms = !this.showRooms;
+    }
+
+    toggleDirectSwitch(): boolean {
+        return this.showDirect = !this.showDirect;
+    }
 
     // Join room, when Join-button is pressed
-    join(): void {
-        this.roomService.join(this.room);
+    join(room: string): void {
+        this.roomService.join(room);
     }
 
     // Create room, when Create-button is pressed and empty newRoom text input

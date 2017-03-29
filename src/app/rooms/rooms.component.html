@@ -1,3 +1,5 @@
-<template ngFor let-room [ngForOf]="userService.rooms">
-    <room [room]="room"></room>
-</template>
+<div class="app-window">
+  <!--<template ngFor let-room [ngForOf]="userService.rooms">-->
+  <room *ngIf="userService.currentRoom" [room]="userService.currentRoom"></room>
+  <!--</template>-->
+</div>

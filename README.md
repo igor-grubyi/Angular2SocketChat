@@ -1,6 +1,6 @@
-# angular2-socketio-chat-example
+# angular2-socketio-chat
 
-An example chat application made with Angular 2 and Socket.io (and NodeJS, ExpressJS and MongoDB).
+An chat application made with Angular 2 and Socket.io (and NodeJS, Typescript, ExpressJS and MongoDB).
 
 ## Highlights
 
@@ -8,9 +8,8 @@ An example chat application made with Angular 2 and Socket.io (and NodeJS, Expre
 - Webpack 2 & TypeScript 2
 - Styles with [SCSS](http://sass-lang.com/)
 - Webpack livereloading (on local development, not HMR but almost as good)
-- Full stack compilation on Heroku build process (this is really must to have, should also work on other systems)
 
-Note! This `angular2-socketio-chat-example` should be considered currently as *proof-of-concept*, as currently there's couple of hotfix packages used over the real ones, however, the changes have been already committed to upstream. Also Webpack 2 is currently on beta phase, as well as TypeScript 2 has a lot of pending issues still with types.
+Note! This `angular2-socketio-chat` should be considered currently as *proof-of-concept*, as currently there's couple of hotfix packages used over the real ones, however, the changes have been already committed to upstream. Also Webpack 2 is currently on beta phase, as well as TypeScript 2 has a lot of pending issues still with types.
 
 ## Prequisities
 
@@ -18,7 +17,6 @@ The projects needs that you have the following things installed:
 
 - [NodeJS](https://nodejs.org/) (version 6 or greater, tested with 6.3.1)
 - [MongoDB](https://www.mongodb.com/) (tested with version 3.2.6)
-- [Heroku Toolbelt](https://toolbelt.heroku.com/) (latest)
 
 All of the prequisities are available on Linux, Windows and Mac OS X systems with their own installers (just go to links above and download package).
 

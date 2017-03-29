@@ -1,9 +1,21 @@
 h1 {
-    background-color: orange;
-    padding: 0.5em 1em;
-    margin: 0;
-    font-size: 1.2em;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
+  background-color: orange;
+  padding: 0.5em 1em;
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.app-component {
+  display: flex;
+  flex-direction: row;
+  font-family: 'Open Sans', sans-serif;
+  height: 100%;
 }
