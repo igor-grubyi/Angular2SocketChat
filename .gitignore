@@ -1,4 +1,5 @@
 **/node_modules/
+**/.vscode/
 /typings/globals
 /typings/index.d.ts
 /typings/modules
