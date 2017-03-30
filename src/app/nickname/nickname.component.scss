@@ -1,4 +1,49 @@
 :host {
-    display: block;
-    padding: 1em;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    align-content: center;
+    background: #254472;
+}
+
+.login_screen {
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 10px;
+
+    &__window {
+        margin: 0 auto;
+        align-items: center;
+        align-content: center;
+        flex-direction: row;
+        display: flex;
+    }
+
+    &__disclaimer {
+        margin-bottom: 50px;
+    }
+
+    &__input {
+        border-radius: 4px;
+        background-color: #3B5780;
+        border: solid 1px #3B5780;
+        color: #fff;
+        padding: 10px 15px;
+        width: 240px;
+    }
+    &__submit {
+        color: #ffffff;
+        margin-left: -35px;
+        cursor: pointer;
+    }
+
+    ::-webkit-input-placeholder {
+        color: #fff;
+        opacity: 0.3;
+    }
 }

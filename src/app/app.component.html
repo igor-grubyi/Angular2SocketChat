@@ -1,5 +1,5 @@
 <div class="app-component">
   <control *ngIf="userService.nickname && userService.nickname !== ''"></control>
   <rooms *ngIf="userService.nickname && userService.nickname !== ''"></rooms>
+  <nickname *ngIf="!userService.nickname || userService.nickname === ''"></nickname>
 </div>
-<nickname *ngIf="!userService.nickname || userService.nickname === ''"></nickname>
