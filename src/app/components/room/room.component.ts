@@ -1,9 +1,11 @@
 import { Component, Input, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, NgZone } from '@angular/core';
 
-import { RoomService, UserService, SocketService } from "../shared";
-import { IMessage, IRoom } from "../../models";
+import { RoomService } from './../../services/room.service';
+import { UserService } from './../../services/user.service';
+import { SocketService } from './../../services/socket.service';
+import { IMessage, IRoom } from "../../../models";
 
-import { MessageService } from "./message.service";
+import { MessageService } from "./../../services/message.service";
 
 declare var require;
 const styles: string = require('./room.component.scss');

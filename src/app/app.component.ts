@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { UserService } from "./shared/user.service";
+import { UserService } from "./services/user.service";
 
 declare var require;
 const styles: string = require("./app.component.scss");

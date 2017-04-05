@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
-import { UserService } from "../shared";
-import { IRoom } from "../../models";
+import { UserService } from "../../services/user.service";
+import { IRoom } from "../../../models";
 
 declare var require;
 const styles: string = require("./rooms.component.scss");

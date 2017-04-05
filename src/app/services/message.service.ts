@@ -1,10 +1,12 @@
+import { Injectable } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { List } from "immutable";
 
-import { SocketService } from "../shared";
+import { SocketService } from "./socket.service";
 
-import { IMessage, ISocketItem } from "../../models";
+import { IMessage, ISocketItem } from "./../../models";
 
+@Injectable()
 export class MessageService {
     messages: ReplaySubject<any> = new ReplaySubject(1);
     private list: List<any> = List();

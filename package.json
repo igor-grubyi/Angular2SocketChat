@@ -44,6 +44,7 @@
     "@types/webpack": "~1.12.34",
     "autoprefixer": "~6.5.0",
     "color-hash": "^1.0.3",
+    "copy-webpack-plugin": "^4.0.1",
     "core-js": "~2.4.1",
     "css-loader": "~0.25.0",
     "del": "~2.2.2",

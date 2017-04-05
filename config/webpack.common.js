@@ -8,6 +8,7 @@ const ContextReplacementPlugin = webpack.ContextReplacementPlugin;
 const DedupePlugin = webpack.optimize.DedupePlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const OccurrenceOrderPlugin = webpack.optimize.OccurrenceOrderPlugin;
 //const ProvidePlugin = webpack.ProvidePlugin;
 
@@ -38,7 +39,12 @@ module.exports = {
                 exclude: [path.resolve(__dirname, '../src/app')],
                 include: [path.resolve(__dirname, '../src/styles')],
                 loader: ExtractTextPlugin.extract('raw!postcss-loader!sass-loader')
-            }
+            },
+            {
+                test: /\.(jpg|jpeg|gif|png)$/,
+                exclude: /node_modules/,
+                loader:'url-loader?limit=1024&name=images/[name].[ext]'
+            },
         ]
     },
 
@@ -71,8 +77,14 @@ module.exports = {
         precision: 10,
         sourceComments: false
     },
-
     plugins: [
+        new CopyWebpackPlugin([
+            { 
+                context: path.resolve(__dirname, '../src/assets/images'),
+                from: '**/*',
+                to: 'assets/images/'
+            }
+        ]),
         new ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             __dirname

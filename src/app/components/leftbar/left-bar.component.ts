@@ -1,20 +1,26 @@
-import { Component, NgZone } from "@angular/core";
+import {
+    Component,
+    NgZone
+} from "@angular/core";
 
-import { RoomService, UserService } from "../shared";
+import { RoomService } from "../../services/room.service";
+import { UserService } from "../../services/user.service";
 
-import { IRoom } from "../../models";
+import {
+    IRoom
+} from "../../../models";
 
 declare var require;
-const styles: string = require("./control.component.scss");
-const template: string = require("./control.component.html");
+const styles: string = require("./left-bar.component.scss");
+const template: string = require("./left-bar.component.html");
 
 @Component({
-    selector: "control",
+    selector: "left-bar",
     styles: [styles],
     template
 })
 
-export class ControlComponent {
+export class LeftBarComponent {
     rooms: IRoom[];
     room: string = "";
     newRoom: string = "";
@@ -22,7 +28,7 @@ export class ControlComponent {
     showDirect: boolean = true;
     username: string;
 
-    constructor(private zone: NgZone, public roomService: RoomService, public userService: UserService) { }
+    constructor(private zone: NgZone, public roomService: RoomService, public userService: UserService) {}
 
     // Handle keypress event, for saving nickname
     ngOnInit(): void {
@@ -32,6 +38,14 @@ export class ControlComponent {
             });
         });
         this.username = this.userService.nickname;
+    }
+
+    ngOnChange(): void {
+        this.roomService.rooms.subscribe(rooms => {
+            this.zone.run(() => {
+                this.rooms = rooms;
+            });
+        });
     }
 
     toggleRoomsSwitch(): boolean {
