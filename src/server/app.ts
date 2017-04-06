@@ -5,7 +5,7 @@ import * as path from "path";
 import * as socketIo from "socket.io";
 import * as mongoose from "mongoose";
 
-import { RoomSocket, UserSocket } from "./socket";
+import { RoomSocket } from "./socket";
 
 declare var process, __dirname;
 
@@ -86,7 +86,6 @@ class Server {
         // Get socket.io handle
         this.io = socketIo(this.server);
         let roomSocket = new RoomSocket(this.io);
-        let userSocket = new UserSocket(this.io);
     }
     
     // Start HTTP server listening

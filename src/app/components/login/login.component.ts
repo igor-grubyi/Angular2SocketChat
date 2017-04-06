@@ -17,7 +17,7 @@ export class LoginComponent implements AfterViewInit {
     nickname: string;
 
     constructor(public userService: UserService) {
-        this.nickname = userService.user.nickname;
+        this.nickname = userService.nickname;
     }
 
     // After view initialised, focus on nickname text input
@@ -27,14 +27,7 @@ export class LoginComponent implements AfterViewInit {
 
     // Save nickname to user store
     save(): void {
-        // this.userService.user.nickname = this.nickname;
-        if(this.userService.findIndex(this.nickname) == -1) {
-            this.userService.create(this.nickname);
-        }
-        else {
-            this.userService.setUser(this.nickname);
-        }
-        
+        this.userService.nickname = this.nickname;
     }
 
     // Handle keypress event, for saving nickname

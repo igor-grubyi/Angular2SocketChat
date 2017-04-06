@@ -64,24 +64,24 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 }, 200);
             });
         });
-        this.messageService.create(this.userService.user.nickname, "joined the channel");
+        this.messageService.create(this.userService.nickname, "joined the channel");
     }
 
     isOwnMessage(nickname: string): boolean {
-        return nickname == this.userService.user.nickname;
+        return nickname == this.userService.nickname;
     }
 
     // Send chat message, and reset message text input
     send(): void {
         console.log("Send")
-        this.messageService.create(this.userService.user.nickname, this.message);
+        this.messageService.create(this.userService.nickname, this.message);
         this.message = "";
     }
 
     // Leave room gracefully
     leave(): void {
         this.alreadyLeftChannel = true;
-        this.messageService.create(this.userService.user.nickname, "left the channel");
+        this.messageService.create(this.userService.nickname, "left the channel");
         this.roomService.leave(this.room.name);
     }
 

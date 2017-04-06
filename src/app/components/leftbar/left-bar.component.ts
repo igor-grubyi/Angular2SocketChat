@@ -7,7 +7,7 @@ import { RoomService } from "../../services/room.service";
 import { UserService } from "../../services/user.service";
 
 import {
-    IRoom, IUser
+    IRoom
 } from "../../../models";
 
 declare var require;
@@ -22,12 +22,11 @@ const template: string = require("./left-bar.component.html");
 
 export class LeftBarComponent {
     rooms: IRoom[];
-    users: IUser[];
     room: string = "";
     newRoom: string = "";
     showRooms: boolean = true;
     showDirect: boolean = true;
-    user: IUser = {nickname: ""};
+    username: string;
 
     constructor(private zone: NgZone, public roomService: RoomService, public userService: UserService) {}
 
@@ -38,13 +37,7 @@ export class LeftBarComponent {
                 this.rooms = rooms;
             });
         });
-        this.userService.users.subscribe(users => {
-            this.zone.run(() => {
-                this.users = users;
-            });
-            console.log(this.users)
-        });
-        this.user = this.userService.user;
+        this.username = this.userService.nickname;
     }
 
     ngOnChange(): void {
