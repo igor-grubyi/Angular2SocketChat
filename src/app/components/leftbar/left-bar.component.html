@@ -22,11 +22,11 @@
   <div class="left-panel__user-data">
     <div class="left-panel__avatar" [colorHash]="username">
       <span class="left-panel__abreviation">
-        {{username | capitalizeFirst}}
+        {{user.nickname | capitalizeFirst}}
       </span>
     </div>
     <div class="left-panel__username">
-      {{username}}
+      {{user.nickname}}
       <i class="material-icons left-panel__user-arrow">keyboard_arrow_down</i>
     </div>
 
@@ -58,8 +58,7 @@
     <div class="left-panel__divider"></div>
   </div>
   <ul class="left-panel__rooms-list" *ngIf="showDirect">
-    <li class="left-panel__room-item" *ngFor="let room of rooms" (click)="join(room.name)">
-      <span>{{room.name}}</span>
-      <!--<i class="material-icons left-panel__delete-button" (click)="remove()">delete</i>-->
+    <li class="left-panel__room-item" *ngFor="let user of users">
+      <span>{{user.nickname}}</span>
   </ul>
 </div>

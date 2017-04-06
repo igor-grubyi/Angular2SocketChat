@@ -1,5 +1,5 @@
 <div class="app-component">
-  <left-bar *ngIf="userService.nickname && userService.nickname !== ''"></left-bar>
-  <rooms *ngIf="userService.nickname && userService.nickname !== ''"></rooms>
-  <login *ngIf="!userService.nickname || userService.nickname === ''"></login>
+  <left-bar *ngIf="userService.user.nickname && userService.user.nickname !== ''"></left-bar>
+  <rooms *ngIf="userService.user.nickname && userService.user.nickname !== ''"></rooms>
+  <login *ngIf="!userService.user.nickname || userService.user.nickname === ''"></login>
 </div>
