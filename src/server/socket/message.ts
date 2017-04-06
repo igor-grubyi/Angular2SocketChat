@@ -30,6 +30,7 @@ export class MessageSocket {
     // Create a message in a room
     private create(message: IMessage): void {
         Message.create(message, (error: any, message: IMessage) => {
+            console.log('socket')
             if (!error && message) {
                 this.nsp.emit("create", message);
             }
