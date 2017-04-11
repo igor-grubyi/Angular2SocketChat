@@ -5,6 +5,8 @@ import { IRoom, IUser, ISocketItem, User } from "../../models";
 import { SocketService } from './socket.service';
 import { List } from "immutable";
 
+import { USER_ACTIONS } from "../../constants";
+
 @Injectable()
 export class UserService {
     user: IUser = {nickname: ""};
@@ -22,7 +24,7 @@ export class UserService {
             (socketItem: ISocketItem) => {
                 let user: IUser = socketItem.item;
                 let index: number = this.findIndex(user.nickname);
-                if (socketItem.action === "remove") {
+                if (socketItem.action === USER_ACTIONS.REMOVE_USER) {
                     // Remove
                     this.list = this.list.delete(index);
                 } else {
@@ -42,7 +44,7 @@ export class UserService {
 
     // Emit message using socket service
     create(nickname: string): void {
-        this.socketService.socket.emit("create", {
+        this.socketService.socket.emit(USER_ACTIONS.CREATE_USER, {
             nickname: nickname
         });
         this.setUser(nickname);

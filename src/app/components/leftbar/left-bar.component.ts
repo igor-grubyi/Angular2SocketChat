@@ -42,7 +42,6 @@ export class LeftBarComponent {
             this.zone.run(() => {
                 this.users = users;
             });
-            console.log(this.users)
         });
         this.user = this.userService.user;
     }

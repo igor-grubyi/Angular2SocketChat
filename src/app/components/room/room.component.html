@@ -10,9 +10,6 @@
 
   <div class="chat-window__messages" #scroll>
     <div class="chat-window__message" *ngFor="let item of messages">
-
-
-
       <div class="chat-window__message-content" *ngIf="!isOwnMessage(item.from)">
         <div class="chat-window__message-info">
           <span class="chat-window__from-user">{{item.from}}</span>

@@ -1,4 +1,5 @@
 import { IMessage, Message } from "../../models";
+import { MESSAGE_ACTIONS } from "../../constants";
 
 export class MessageSocket {
     nsp: any;
@@ -18,7 +19,7 @@ export class MessageSocket {
     // Add signal
     private listen(): void {
         this.socket.on("disconnect", () => this.disconnect());
-        this.socket.on("create", (message: IMessage) => this.create(message));
+        this.socket.on(MESSAGE_ACTIONS.CREATE_MESSAGE, (message: IMessage) => this.create(message));
         this.socket.on("list", () => this.list());
     }
 
@@ -30,9 +31,8 @@ export class MessageSocket {
     // Create a message in a room
     private create(message: IMessage): void {
         Message.create(message, (error: any, message: IMessage) => {
-            console.log('socket')
             if (!error && message) {
-                this.nsp.emit("create", message);
+                this.nsp.emit(MESSAGE_ACTIONS.CREATE_MESSAGE, message);
             }
         });
     }
@@ -47,7 +47,7 @@ export class MessageSocket {
                 .exec( 
                     (error: any, messages: IMessage[]) => {
                         for (let message of messages.reverse()) {
-                            this.socket.emit("create", message);
+                            this.socket.emit(MESSAGE_ACTIONS.CREATE_MESSAGE, message);
                         }
                     }
                 );

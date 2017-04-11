@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import * as io from "socket.io-client";
 
 import { IMessage, ISocketItem } from "../../models";
+import { MESSAGE_ACTIONS, USER_ACTIONS, ROOM_ACTIONS } from "../../constants";
 
 @Injectable()
 export class SocketService {
@@ -25,20 +26,21 @@ export class SocketService {
 
         // Return observable which follows "create" and "remove" signals from socket stream
         return Observable.create((observer: any) => {
-            this.socket.on("create", (item: any) => observer.next({ action: "create", item: item }) );
-            this.socket.on("remove", (item: any) => observer.next({ action: "remove", item: item }) );
+            this.setupActionListeners([MESSAGE_ACTIONS, ROOM_ACTIONS, USER_ACTIONS], observer)
             return () => this.socket.close();
         });
     }
 
-    // Create signal
-    create(name: string) {
-        this.socket.emit("create", name);
+    setupActionListeners(actions: Array<Object>, observer: any) {
+        actions.map((action) => {
+            Object.keys(action).map((key)=>{
+                this.socket.on(action[key], (item: any) => observer.next({ action: action[key], item: item }) );
+            })
+        })
     }
 
-    // Remove signal
-    remove(name: string) {
-        this.socket.emit("remove", name);
+    emitAction(action: string, payload: any) {
+        this.socket.emit(action, payload)
     }
 
     // Handle connection opening

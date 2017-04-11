@@ -1,6 +1,7 @@
 import { IRoom, Room, IMessage, Message } from "../../models";
 
 import { MessageSocket } from "./message";
+import { ROOM_ACTIONS } from "../../constants";
 
 export class RoomSocket {
     nsp: any;
@@ -21,8 +22,8 @@ export class RoomSocket {
     // Add signal
     private listen(): void {
         this.socket.on("disconnect", () => this.disconnect());
-        this.socket.on("create", (name: string) => this.create(name));
-        this.socket.on("remove", (name: string) => this.remove(name));
+        this.socket.on(ROOM_ACTIONS.CREATE_ROOM, (name: string) => this.create(name));
+        this.socket.on(ROOM_ACTIONS.REMOVE_ROOM, (name: string) => this.remove(name));
         this.socket.on("list", () => this.list());
     }
 
@@ -37,7 +38,7 @@ export class RoomSocket {
             console.log("Creating namespace for room:", room.name);
             this.rooms[room.name] = new MessageSocket(this.io, room.name);
         }
-        this.nsp.emit("create", room);        
+        this.nsp.emit(ROOM_ACTIONS.CREATE_ROOM, room);        
     }
 
     // Create a room
@@ -65,7 +66,7 @@ export class RoomSocket {
             name: name
         }).exec( (error: any, room: IRoom) => {
             if (!error && room) {
-                this.nsp.emit("remove", room);
+                this.nsp.emit(ROOM_ACTIONS.REMOVE_ROOM, room);
             }
         });
     }
