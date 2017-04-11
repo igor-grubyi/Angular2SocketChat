@@ -1,5 +1,7 @@
 import { IUser, User } from "../../models";
 
+import { USER_ACTIONS } from "../../constants";
+
 export class UserSocket {
     nsp: any;
     name: string;
@@ -17,7 +19,7 @@ export class UserSocket {
     // Add signal
     private listen(): void {
         this.socket.on("disconnect", () => this.disconnect());
-        this.socket.on("create", (User: IUser) => this.create(User));
+        this.socket.on(USER_ACTIONS.CREATE_USER, (User: IUser) => this.create(User));
         this.socket.on("list", () => this.list());
     }
 
@@ -31,7 +33,7 @@ export class UserSocket {
         User.create(user, (error: any, user: IUser) => {
             console.log('socket')
             if (!error && user) {
-                this.nsp.emit("create", user);
+                this.nsp.emit(USER_ACTIONS.CREATE_USER, user);
             }
         });
     }
@@ -46,7 +48,7 @@ export class UserSocket {
                 .exec( 
                     (error: any, Users: IUser[]) => {
                         for (let User of Users.reverse()) {
-                            this.socket.emit("create", User);
+                            this.socket.emit(USER_ACTIONS.CREATE_USER, User);
                         }
                     }
                 );

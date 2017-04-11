@@ -5,6 +5,7 @@ import { List } from "immutable";
 import { SocketService } from "./socket.service";
 
 import { IMessage, ISocketItem } from "./../../models";
+import { MESSAGE_ACTIONS } from "./../../constants";
 
 @Injectable()
 export class MessageService {
@@ -28,8 +29,7 @@ export class MessageService {
 
     // Emit message using socket service
     create(from: string, message: string): void {
-        console.log("Sent Message")
-        this.socketService.socket.emit("create", {
+        this.socketService.emitAction(MESSAGE_ACTIONS.CREATE_MESSAGE, {
             room: this.room,
             created: new Date(),
             from: from,

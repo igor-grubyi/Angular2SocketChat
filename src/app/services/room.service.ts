@@ -7,6 +7,8 @@ import { UserService } from "./user.service";
 
 import { IRoom, ISocketItem } from "../../models";
 
+import { ROOM_ACTIONS } from "../../constants";
+
 @Injectable()
 export class RoomService {
     rooms: ReplaySubject<any> = new ReplaySubject(1);
@@ -22,7 +24,7 @@ export class RoomService {
             (socketItem: ISocketItem) => {
                 let room: IRoom = socketItem.item;
                 let index: number = this.findIndex(room.name);
-                if (socketItem.action === "remove") {
+                if (socketItem.action === ROOM_ACTIONS.REMOVE_ROOM) {
                     // Remove
                     this.list = this.list.delete(index);
                 } else {
@@ -72,7 +74,7 @@ export class RoomService {
 
     // Create room
     create(name: string) {
-        this.socketService.create(name);
+        this.socketService.emitAction(ROOM_ACTIONS.CREATE_ROOM, name);
     }
 
     // Remove room
@@ -86,7 +88,7 @@ export class RoomService {
         }
 
         // Send signal to remove the room
-        this.socketService.remove(name);
+        this.socketService.emitAction(ROOM_ACTIONS.REMOVE_ROOM, name);
     }
 
     // Find matching room
