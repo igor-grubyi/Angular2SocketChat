@@ -6,6 +6,7 @@ import { SocketService } from './../../services/socket.service';
 import { IMessage, IRoom } from "../../../models";
 
 import { MessageService } from "./../../services/message.service";
+import { Observable } from "rxjs";
 
 declare var require;
 const styles: string = require('./room.component.scss');
@@ -23,6 +24,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() room: IRoom;
     message: string = "";
     messages: IMessage[];
+    messages_: Observable<Array<IMessage>>;
     private messageService: MessageService;
     private alreadyLeftChannel: boolean = false;
 
@@ -31,7 +33,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         private roomService: RoomService,
         public userService: UserService,
         public socketService: SocketService
-    ) { }
+    ) {
+        
+     }
 
     // Handle keypress event, for saving nickname
     ngOnInit(): void {
