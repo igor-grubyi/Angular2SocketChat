@@ -15,7 +15,7 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: [/\.spec\.ts$/, path.resolve(__dirname, '../node_modules')],
-                loader: 'ts'
+                loader: 'awesome-typescript-loader'
             }
         ]
     },

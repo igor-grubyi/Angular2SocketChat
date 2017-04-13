@@ -10,35 +10,36 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const OccurrenceOrderPlugin = webpack.optimize.OccurrenceOrderPlugin;
+const { CheckerPlugin } = require('awesome-typescript-loader')
 //const ProvidePlugin = webpack.ProvidePlugin;
 
 module.exports = {
     target: 'web',
     cache: true,
-    debug: false,
+    
 
     module: {
-        noParse: ['ws'],
+        // noParse: ['ws'],
         loaders: [
             {
                 test: /\.ts$/,
                 exclude: [path.resolve(__dirname, '../node_modules')],
-                loader: 'ts-loader'
+                loader: 'awesome-typescript-loader'
             },
             {
                 test: /\.html$/,
-                loader: 'raw'
+                loader: 'raw-loader'
             },
             {
                 test: /\.scss$/,
                 include: [path.resolve(__dirname, '../src/app')],
-                loader: 'raw!postcss-loader!sass-loader'
+                loader: 'raw-loader!postcss-loader!sass-loader'
             },
             {
                 test: /\.scss$/,
                 exclude: [path.resolve(__dirname, '../src/app')],
                 include: [path.resolve(__dirname, '../src/styles')],
-                loader: ExtractTextPlugin.extract('raw!postcss-loader!sass-loader')
+                loader: ExtractTextPlugin.extract('raw-loader!postcss-loader!sass-loader')
             },
             {
                 test: /\.(jpg|jpeg|gif|png)$/,
@@ -67,17 +68,21 @@ module.exports = {
     },
 
     externals: ['ws'],
-
-    postcss: [
-        autoprefixer({ browsers: ['last 3 versions', 'Firefox ESR'] })
-    ],
-
-    sassLoader: {
-        outputStyle: 'compressed',
-        precision: 10,
-        sourceComments: false
-    },
     plugins: [
+        new webpack.LoaderOptionsPlugin({
+         // test: /\.xxx$/, // may apply this only for some modules
+         options: {
+           sassLoader: {
+                outputStyle: 'compressed',
+                precision: 10,
+                sourceComments: false
+            },
+            postcss: [
+                autoprefixer({ browsers: ['last 3 versions', 'Firefox ESR'] })
+            ],
+         },
+         debug: false,
+       }),
         new CopyWebpackPlugin([
             { 
                 context: path.resolve(__dirname, '../src/assets/images'),
@@ -111,9 +116,8 @@ module.exports = {
     ],
 
     resolve: {
-        extensions: ['', '.ts', '.js', '.json'],
-        modulesDirectories: ['node_modules'],
-        root: path.resolve('../src')
+        extensions: ['.ts', '.js', '.json'],
+        modules: [path.resolve('../src'), "node_modules"]
     },
 
     output: {

@@ -9,7 +9,8 @@ export interface IMessage {
 }
 
 export interface MessagesState {
-    messages: any[];
+    room: string,
+    messages: IMessage[];
 }
 
 export interface IMessageModel extends IMessage, mongoose.Document {}
