@@ -8,6 +8,11 @@ export interface IMessage {
     message: string;
 }
 
+export interface MessagesState {
+    room: string,
+    messages: IMessage[];
+}
+
 export interface IMessageModel extends IMessage, mongoose.Document {}
  
 export var MessageSchema = new mongoose.Schema({

@@ -2,102 +2,101 @@ import { Component, Input, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChi
 
 import { RoomService } from './../../services/room.service';
 import { UserService } from './../../services/user.service';
-import { SocketService } from './../../services/socket.service';
 import { IMessage, IRoom } from "../../../models";
 
-import { MessageService } from "./../../services/message.service";
+import { MessagesStateService } from "../../state-services/message-state.service";
+
+import { Observable } from "rxjs";
 
 declare var require;
 const styles: string = require('./room.component.scss');
 const template: string = require('./room.component.html');
 
 @Component({
-    selector: 'room',
-    styles: [styles],
-    template
+  selector: 'room',
+  styles: [styles],
+  providers: [MessagesStateService],
+  template
 })
 
 export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('scroll') private scroll: ElementRef;
-    @ViewChild('focus') private focus: ElementRef;
-    @Input() room: IRoom;
-    message: string = "";
-    messages: IMessage[];
-    private messageService: MessageService;
-    private alreadyLeftChannel: boolean = false;
+  @ViewChild('scroll') private scroll: ElementRef;
+  @ViewChild('focus') private focus: ElementRef;
+  @Input() room: IRoom;
+  message: string = "";
+  messages: IMessage[];
+  private alreadyLeftChannel: boolean = false;
 
-    constructor(
-        private zone: NgZone,
-        private roomService: RoomService,
-        public userService: UserService,
-        public socketService: SocketService
-    ) { }
+  constructor(
+    private zone: NgZone,
+    private roomService: RoomService,
+    public userService: UserService,
+    private messagesStateService: MessagesStateService
+  ) { }
 
-    // Handle keypress event, for saving nickname
-    ngOnInit(): void {
-        this.getRoomMessages();
+  ngOnInit(): void {
+    this.getRoomMessages();
+  }
+
+  ngOnChanges(): void {
+    this.getRoomMessages();
+  }
+
+  // After view initialized, focus on chat message text input
+  ngAfterViewInit(): void {
+    this.focus.nativeElement.focus();
+  }
+
+  // When component is destroyed, ensure that leave message is sent
+  ngOnDestroy(): void {
+      if (!this.alreadyLeftChannel) {
+          this.leave();
+      }
+  }
+
+  getRoomMessages(): void {
+    this.messagesStateService.select('messages').subscribe(
+      (messagesList) => {
+        this.zone.run(()=>{
+          this.messages = <IMessage[]>messagesList;
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 200);
+        })
+      }
+    )
+    this.messagesStateService.loadMessagesForRoom(this.room.name);
+  }
+
+  isOwnMessage(nickname: string): boolean {
+    return nickname == this.userService.user.nickname;
+  }
+
+  // Send chat message, and reset message text input
+  send(): void {
+    this.messagesStateService.sendMessageToRoom(this.userService.user.nickname, this.message, this.room.name);
+    this.message = "";
+  }
+
+  // Leave room gracefully
+  leave(): void {
+    this.alreadyLeftChannel = true;
+    this.roomService.leave(this.room.name);
+  }
+
+  //* Scroll to bottom (this is called when new message is received)
+  scrollToBottom(): void {
+    try {
+      this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
+    } catch (error) {
+      console.log("ERROR:", error);
     }
+  }
 
-    ngOnChanges(): void {
-        this.getRoomMessages();
+  // Handle keypress event, for sending chat message
+  eventHandler(event: KeyboardEvent): void {
+    if (event.key === "Enter") {
+      this.send();
     }
-
-    // After view initialized, focus on chat message text input
-    ngAfterViewInit(): void {
-        this.focus.nativeElement.focus();
-    }
-
-    // When component is destroyed, ensure that leave message is sent
-    ngOnDestroy(): void {
-        if (!this.alreadyLeftChannel) {
-            this.leave();
-        }
-    }
-
-    getRoomMessages(): void {
-        this.messageService = new MessageService(this.room.name);
-        this.messageService.messages.subscribe(messages => {
-            this.zone.run(() => {
-                this.messages = messages;
-                setTimeout(() => {
-                    this.scrollToBottom();
-                }, 200);
-            });
-        });
-        this.messageService.create(this.userService.user.nickname, "joined the channel");
-    }
-
-    isOwnMessage(nickname: string): boolean {
-        return nickname == this.userService.user.nickname;
-    }
-
-    // Send chat message, and reset message text input
-    send(): void {
-        console.log("Send")
-        this.messageService.create(this.userService.user.nickname, this.message);
-        this.message = "";
-    }
-
-    // Leave room gracefully
-    leave(): void {
-        this.alreadyLeftChannel = true;
-        this.messageService.create(this.userService.user.nickname, "left the channel");
-        this.roomService.leave(this.room.name);
-    }
-
-    //* Scroll to bottom (this is called when new message is received)
-    scrollToBottom(): void {
-        try {
-            this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
-        } catch (error) {
-            console.log("ERROR:", error);
-        }
-    }
-
-    // Handle keypress event, for sending chat message
-    eventHandler(event: KeyboardEvent): void {
-        if (event.key === "Enter") {
-            this.send();
-        }
-    }
+  }
 }
