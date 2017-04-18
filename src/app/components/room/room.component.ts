@@ -65,10 +65,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       }
   }
 
-  isOwnMessage(nickname: string): boolean {
-    return nickname == this.userService.user.nickname;
-  }
-
   // Send chat message, and reset message text input
   send(): void {
     this.messagesService.sendMessageToRoom(this.userService.user.nickname, this.message, this.room.name);

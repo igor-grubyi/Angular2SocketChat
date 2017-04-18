@@ -1,9 +1,17 @@
 import { MESSAGE_ACTIONS } from "./../../constants";
+import { IMessage } from "./../../models";
+
+let messages_arr: IMessage[] = [];
+
+const addMessage = (message: IMessage): Array<IMessage> => {
+  messages_arr.push(message);
+  return messages_arr;
+}
 
 export const messages = (state: any = [], {type, payload}) => {
   switch (type) {
     case MESSAGE_ACTIONS.ADD_MESSAGES:
-      return payload;
+      return addMessage(payload);
     case MESSAGE_ACTIONS.CREATE_MESSAGE:
       return [...state, payload];
     case 'UPDATE_ITEM':

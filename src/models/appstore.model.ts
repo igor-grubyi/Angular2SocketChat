@@ -1,5 +1,7 @@
-import {IMessage} from './message.model';
+import {IMessage, IRoom} from './index';
 
 export interface AppStore {
-  messages: IMessage[];
+  messages: IMessage[],
+  rooms: IRoom[],
+  currentRoom: IRoom,
 };

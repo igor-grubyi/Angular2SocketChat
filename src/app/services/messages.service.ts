@@ -24,14 +24,11 @@ export class MessagesService {
   }
 
   loadMessagesForRoom(roomName: string) {
-    let messages = [];
     this.socketService
         .get("messages/" + encodeURIComponent(roomName))
         .subscribe(
           (socketItem: ISocketItem) => {
-            let message: IMessage = socketItem.item;
-            messages.push(message);
-            this.store.dispatch({type: MESSAGE_ACTIONS.ADD_MESSAGES, payload: messages});
+            this.store.dispatch({type: MESSAGE_ACTIONS.ADD_MESSAGES, payload: socketItem.item});
           },
           error => console.log(error)
         );
