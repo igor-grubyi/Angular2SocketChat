@@ -2,9 +2,10 @@ import { Component, Input, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChi
 
 import { RoomService } from './../../services/room.service';
 import { UserService } from './../../services/user.service';
-import { IMessage, IRoom } from "../../../models";
+import { IMessage, IRoom, AppStore } from "../../../models";
 
-import { MessagesStateService } from "../../state-services/message-state.service";
+import { Store } from '@ngrx/store';
+import { MessagesService } from './../../services/messages.service';
 
 import { Observable } from "rxjs";
 
@@ -15,7 +16,7 @@ const template: string = require('./room.component.html');
 @Component({
   selector: 'room',
   styles: [styles],
-  providers: [MessagesStateService],
+  providers: [MessagesService],
   template
 })
 
@@ -24,22 +25,32 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('focus') private focus: ElementRef;
   @Input() room: IRoom;
   message: string = "";
-  messages: IMessage[];
+  messages: Array<IMessage>;
   private alreadyLeftChannel: boolean = false;
 
   constructor(
     private zone: NgZone,
     private roomService: RoomService,
     public userService: UserService,
-    private messagesStateService: MessagesStateService
-  ) { }
-
-  ngOnInit(): void {
-    this.getRoomMessages();
+    private store: Store<AppStore>,
+    private messagesService: MessagesService,
+  ) { 
   }
 
-  ngOnChanges(): void {
-    this.getRoomMessages();
+  ngOnInit(): void {
+    this.initMessages();
+  }
+
+  initMessages() {
+    this.messagesService.messages.subscribe((messages)=>{
+      this.zone.run(()=>{
+        this.messages = messages;
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 200);
+      })
+    });
+    this.messagesService.loadMessagesForRoom(this.room.name);
   }
 
   // After view initialized, focus on chat message text input
@@ -54,27 +65,13 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       }
   }
 
-  getRoomMessages(): void {
-    this.messagesStateService.select('messages').subscribe(
-      (messagesList) => {
-        this.zone.run(()=>{
-          this.messages = <IMessage[]>messagesList;
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 200);
-        })
-      }
-    )
-    this.messagesStateService.loadMessagesForRoom(this.room.name);
-  }
-
   isOwnMessage(nickname: string): boolean {
     return nickname == this.userService.user.nickname;
   }
 
   // Send chat message, and reset message text input
   send(): void {
-    this.messagesStateService.sendMessageToRoom(this.userService.user.nickname, this.message, this.room.name);
+    this.messagesService.sendMessageToRoom(this.userService.user.nickname, this.message, this.room.name);
     this.message = "";
   }
 

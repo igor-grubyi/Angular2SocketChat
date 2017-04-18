@@ -1,32 +1,26 @@
-import { Injectable } from "@angular/core";
-import { StateService } from "./abstract.state.service";
-import { MessagesState, IMessage, ISocketItem } from "../../models";
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/map';
 
-import { SocketService } from "./../services/socket.service";
+import { IMessage, ISocketItem } from "../../models";
+import { AppStore } from '../../models/appstore.model';
+import { SocketService } from "./socket.service";
+
 import { MESSAGE_ACTIONS } from "../../constants";
 
 @Injectable()
-export class MessagesStateService extends StateService<MessagesState> {
+export class MessagesService {
+  messages: Observable<Array<IMessage>>;
   private socketService: SocketService;
-  constructor() {
-    super();
-    this.initializeMessagesSocket();
-  }
 
-  initialState(): MessagesState {
-    return { messages: [], room: "" };
+  constructor(private store: Store<AppStore>) {
+    this.messages = store.select('messages');
+    this.initializeMessagesSocket();
   }
 
   initializeMessagesSocket(): void {
     this.socketService = new SocketService();
-  }
-
-  updateStateMessages(roomName: string, messagesList: IMessage[]): void {
-    let state = this.getValue();
-    this.update(Object.assign({}, state, {
-      room: roomName,
-      messages: messagesList
-    }));
   }
 
   loadMessagesForRoom(roomName: string) {
@@ -37,7 +31,7 @@ export class MessagesStateService extends StateService<MessagesState> {
           (socketItem: ISocketItem) => {
             let message: IMessage = socketItem.item;
             messages.push(message);
-            this.updateStateMessages(roomName, messages);
+            this.store.dispatch({type: MESSAGE_ACTIONS.ADD_MESSAGES, payload: messages});
           },
           error => console.log(error)
         );
@@ -52,5 +46,4 @@ export class MessagesStateService extends StateService<MessagesState> {
         message: message
       });
     }
-         
 }
