@@ -46,8 +46,6 @@ export class SocketService {
     // Handle connection opening
     private connect() {
         console.log(`Connected to "${this.name}"`);
-
-        // Request initial list when connected
         this.socket.emit("list");
     }
 

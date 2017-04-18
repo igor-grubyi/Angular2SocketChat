@@ -2,9 +2,8 @@ import { Component, Input, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChi
 
 import { RoomService } from './../../services/room.service';
 import { UserService } from './../../services/user.service';
-import { IMessage, IRoom, AppStore } from "../../../models";
+import { IMessage, IRoom } from "../../../models";
 
-import { Store } from '@ngrx/store';
 import { MessagesService } from './../../services/messages.service';
 
 import { Observable } from "rxjs";
@@ -32,12 +31,15 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     private zone: NgZone,
     private roomService: RoomService,
     public userService: UserService,
-    private store: Store<AppStore>,
     private messagesService: MessagesService,
   ) { 
   }
 
   ngOnInit(): void {
+    this.initMessages();
+  }
+
+  ngOnChanges() {
     this.initMessages();
   }
 
@@ -50,6 +52,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 200);
       })
     });
+    this.messagesService.clearMessagesList();
     this.messagesService.loadMessagesForRoom(this.room.name);
   }
 
@@ -74,7 +77,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   // Leave room gracefully
   leave(): void {
     this.alreadyLeftChannel = true;
-    this.roomService.leave(this.room.name);
+    this.roomService.leave(this.room);
   }
 
   //* Scroll to bottom (this is called when new message is received)

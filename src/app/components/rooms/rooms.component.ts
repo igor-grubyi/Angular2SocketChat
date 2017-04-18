@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 
-import { UserService } from "../../services/user.service";
+import { RoomService } from "../../services/room.service";
 import { IRoom } from "../../../models";
 
 declare var require;
@@ -14,5 +14,12 @@ const template: string = require("./rooms.component.html");
 })
 
 export class RoomsComponent {
-    constructor(public userService: UserService) {}
+    currentRoom: IRoom;
+    constructor(public roomService: RoomService, private zone: NgZone) {
+        this.roomService.currentRoom.subscribe((room)=>{
+            this.zone.run(()=>{
+                this.currentRoom = room;
+            })
+        })
+    }
 }

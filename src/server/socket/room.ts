@@ -38,7 +38,7 @@ export class RoomSocket {
             console.log("Creating namespace for room:", room.name);
             this.rooms[room.name] = new MessageSocket(this.io, room.name);
         }
-        this.nsp.emit(ROOM_ACTIONS.CREATE_ROOM, room);        
+        this.nsp.emit(ROOM_ACTIONS.ADD_ROOM, room);        
     }
 
     // Create a room
