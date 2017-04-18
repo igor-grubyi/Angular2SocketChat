@@ -1,0 +1,23 @@
+<div class="wom-message">
+  <div class="wom-message__content" *ngIf="!isOwnMessage(message.from)">
+    <div class="wom-message__info">
+      <span class="wom-message__from-user">{{message.from}}</span>
+      <span class="wom-message__time">{{message.created | date: shortTime}}</span>
+    </div>
+    <div class="wom-message__body">
+      <div class="wom-message__avatar" [colorHash]="message.from">
+        <span class="wom-message__abreviation">
+          {{message.from | capitalizeFirst}}
+        </span>
+      </div>
+      <div class="wom-message__bubble">{{message.message}}</div>
+    </div>
+  </div>
+
+  <div class="wom-message__content --own" *ngIf="isOwnMessage(message.from)">
+    <div class="wom-message__body">
+      <span class="wom-message__time">{{message.created | date: shortTime}}</span>
+      <div class="wom-message__bubble">{{message.message}}</div>
+    </div>
+  </div>
+</div>

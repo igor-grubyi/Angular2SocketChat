@@ -1,0 +1,115 @@
+.wom-message {
+  margin: 0 0 0.2em 0;
+  padding: 0;
+  &--dimmed {
+    color: silver;
+  }
+  &__abreviation {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.9px;
+    text-align: center;
+    color: #ffffff;
+  }
+  &__avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 3px;
+    background-color: #4d73ac;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+  }
+  &__from-user {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #4a4a4a;
+    padding-right: 10px;
+  }
+  &__info {
+    margin-left: 50px;
+    margin-bottom: 5px;
+  }
+  &__time {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #a2aab6;
+  }
+  &__body {
+    display: flex;
+    align-content: center;
+    align-items: center;
+  }
+  &__bubble {
+    padding: 10px 15px 0 5px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #4a4a4a;
+    &:before {
+      content: "";
+      display: flex;
+      position: relative;
+      border-style: solid;
+      border-width: 15px 15px 15px 0;
+      left: -12px;
+      bottom: 5px;
+      border-color: transparent #fff;
+    }
+  }
+
+  &__content {
+    margin: 10px 0;
+    &.--own {
+      text-align: right;
+      .chat-window {
+        &__body {
+          display: flex;
+          align-items: center;
+          flex-direction: row-reverse;
+        }
+        &__bubble {
+          background-color: #4d73ac;
+          color: #fff;
+          margin-right: 12px;
+          &:before {
+            border-color: transparent;
+          }
+          &:after {
+            content: "";
+            display: flex;
+            position: relative;
+            border-style: solid;
+            border-width: 15px 0 15px 15px;
+            left: 22px;
+            bottom: 5px;
+            border-color: transparent #4d73ac;
+          }
+        }
+      }
+    }
+  }
+}
