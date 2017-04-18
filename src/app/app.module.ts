@@ -11,6 +11,8 @@ import { pipes } from './pipes/index';
 import { services } from "./services/index";
 
 import { messages } from "./stores/messages.store";
+import { rooms } from "./stores/rooms.store";
+import { currentRoom } from "./stores/currentRoom.store";
 
 
 @NgModule({
@@ -18,7 +20,7 @@ import { messages } from "./stores/messages.store";
         BrowserModule,
         CommonModule,
         FormsModule,
-        StoreModule.provideStore({messages}),
+        StoreModule.provideStore({messages, rooms, currentRoom}),
     ],
     declarations: [
         AppComponent,

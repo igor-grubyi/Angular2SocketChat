@@ -1,9 +1,14 @@
 import { Injectable } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { List } from "immutable";
+import { Store } from '@ngrx/store';
+import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/map';
 
 import { SocketService } from "./socket.service";
 import { UserService } from "./user.service";
+
+import { AppStore } from '../../models/appstore.model';
 
 import { IRoom, ISocketItem } from "../../models";
 
@@ -11,58 +16,53 @@ import { ROOM_ACTIONS } from "../../constants";
 
 @Injectable()
 export class RoomService {
-    rooms: ReplaySubject<any> = new ReplaySubject(1);
+    rooms: Observable<Array<IRoom>>;
+    currentRoom: Observable<IRoom>;
     private list: List<any> = List();
 
     constructor(
         private socketService: SocketService,
-        private userService: UserService
+        private userService: UserService,
+        private store: Store<AppStore>
     ) {
+        this.rooms = store.select('rooms');
+        this.currentRoom = store.select('currentRoom');
+        this.loadRooms();
+    }
+
+    loadRooms() {
         this.socketService
             .get("room")
             .subscribe(
             (socketItem: ISocketItem) => {
                 let room: IRoom = socketItem.item;
                 let index: number = this.findIndex(room.name);
-                if (socketItem.action === ROOM_ACTIONS.REMOVE_ROOM) {
-                    // Remove
-                    this.list = this.list.delete(index);
-                } else {
-                    if (index === -1) {
-                        // Create
-                        this.list = this.list.push(room);
-                    } else {
-                        // Update
-                        this.list = this.list.set(index, room)
-                    }
+                switch (socketItem.action) {
+                    case ROOM_ACTIONS.REMOVE_ROOM:
+                        this.store.dispatch({type: ROOM_ACTIONS.REMOVE_ROOM, payload: room});
+                        break;
+                    case ROOM_ACTIONS.CREATE_ROOM:
+                        this.store.dispatch({type: ROOM_ACTIONS.CREATE_ROOM, payload: room});
+                        break;
+                    case ROOM_ACTIONS.UPDATE_ROOM:
+                        this.store.dispatch({type: ROOM_ACTIONS.UPDATE_ROOM, payload: room});
+                        break;
+                    default:
+                        this.store.dispatch({type: ROOM_ACTIONS.ADD_ROOM, payload: room});
+                        break;
                 }
-                this.rooms.next(this.list);
             },
             error => console.log(error)
             );
     }
 
     // Join room
-    join(name: string): void {
-        if (this.userService.currentRoom) {
-            this.leave(this.userService.currentRoom.name);
-        }
-        for (let roomIndex in this.userService.rooms) {
-            let room = this.userService.rooms[roomIndex];
-            if (room.name === name) {
-                return;
-            }
-        }
-        let index = this.findIndex(name);
-        if (index !== -1) {
-            let room = this.list.get(index);
-            this.userService.rooms.push(room);
-            this.userService.currentRoom = room;
-        }
+    join(room: IRoom): void {
+        this.store.dispatch({type: ROOM_ACTIONS.SET_CURRENT_ROOM, payload: room});
     }
 
     // Leave room
-    leave(name: string) {
+    leave(room: IRoom) {
         // First remove the room from user joined rooms
         for (var i = 0; i < this.userService.rooms.length; i++) {
             let room = this.userService.rooms[i];
@@ -79,14 +79,6 @@ export class RoomService {
 
     // Remove room
     remove(name: string) {
-        // First remove the room from user joined rooms
-        for (var i = 0; i < this.userService.rooms.length; i++) {
-            let room = this.userService.rooms[i];
-            if (room.name === name) {
-                this.userService.rooms.splice(i, 1);
-            }
-        }
-
         // Send signal to remove the room
         this.socketService.emitAction(ROOM_ACTIONS.REMOVE_ROOM, name);
     }

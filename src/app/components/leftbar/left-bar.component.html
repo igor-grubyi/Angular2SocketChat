@@ -46,7 +46,7 @@
     <div class="left-panel__divider"></div>
   </div>
   <ul class="left-panel__rooms-list" *ngIf="showRooms">
-    <li class="left-panel__room-item" *ngFor="let room of rooms" (click)="join(room.name)">
+    <li class="left-panel__room-item" *ngFor="let room of rooms" (click)="join(room)">
       <span>{{room.name}}</span>
       <!--<i class="material-icons left-panel__delete-button" (click)="remove()">delete</i>-->
   </ul>

@@ -34,6 +34,10 @@ export class MessagesService {
         );
     }
 
+    clearMessagesList() {
+      this.store.dispatch({type: MESSAGE_ACTIONS.RESET_MESSAGES});
+    }
+
     sendMessageToRoom(from: string, message: string, room: string): void {
       this.socketService.emitAction(MESSAGE_ACTIONS.CREATE_MESSAGE, {
         room: room,

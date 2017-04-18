@@ -63,7 +63,7 @@ export class LeftBarComponent {
     }
 
     // Join room, when Join-button is pressed
-    join(room: string): void {
+    join(room: IRoom): void {
         this.roomService.join(room);
     }
 

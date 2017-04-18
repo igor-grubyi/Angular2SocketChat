@@ -12,7 +12,6 @@ export class UserService {
     user: IUser = {nickname: ""};
     users: ReplaySubject<any> = new ReplaySubject(1);
     rooms: IRoom[] = [];
-    currentRoom: IRoom;
     private list: List<any> = List();
 
     constructor(

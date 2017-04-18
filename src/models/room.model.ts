@@ -1,7 +1,9 @@
 import * as mongoose from "mongoose";
+import { IUser } from "./user.model";
 
 export interface IRoom {
     name: string;
+    users: IUser[];
     created: Date;
 }
 
@@ -12,6 +14,7 @@ export var RoomSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    users: Array,
     created: Date
 });
 

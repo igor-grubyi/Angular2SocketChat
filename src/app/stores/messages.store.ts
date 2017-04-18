@@ -10,6 +10,9 @@ const addMessage = (message: IMessage): Array<IMessage> => {
 
 export const messages = (state: any = [], {type, payload}) => {
   switch (type) {
+    case MESSAGE_ACTIONS.RESET_MESSAGES:
+      state.splice(0, state.length);
+      return state;
     case MESSAGE_ACTIONS.ADD_MESSAGES:
       return addMessage(payload);
     case MESSAGE_ACTIONS.CREATE_MESSAGE:
