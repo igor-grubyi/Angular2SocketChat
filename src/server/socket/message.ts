@@ -1,4 +1,4 @@
-import { IMessage, Message } from "../../models";
+import { IMessage, Message, IUser } from "../../models";
 import { MESSAGE_ACTIONS } from "../../constants";
 
 export class MessageSocket {
@@ -21,6 +21,7 @@ export class MessageSocket {
         this.socket.on("disconnect", () => this.disconnect());
         this.socket.on(MESSAGE_ACTIONS.CREATE_MESSAGE, (message: IMessage) => this.create(message));
         this.socket.on("list", () => this.list());
+        this.socket.on(MESSAGE_ACTIONS.GET_USER_MESSAGES, (payload) => this.getDirectUserMessageslist(payload));
     }
 
     // Handle disconnect
@@ -30,6 +31,7 @@ export class MessageSocket {
 
     // Create a message in a room
     private create(message: IMessage): void {
+        console.log(message)
         Message.create(message, (error: any, message: IMessage) => {
             if (!error && message) {
                 this.nsp.emit(MESSAGE_ACTIONS.CREATE_MESSAGE, message);
@@ -45,6 +47,32 @@ export class MessageSocket {
                 .sort({ created: -1 }) // Sort newest messages first
                 .limit(25) // Limit to 25 first results
                 .exec( 
+                    (error: any, messages: IMessage[]) => {
+                        for (let message of messages.reverse()) {
+                            this.socket.emit(MESSAGE_ACTIONS.CREATE_MESSAGE, message);
+                        }
+                    }
+                );
+        }
+    }
+    private getDirectUserMessageslist(payload): void {
+        if (this.socket && this.socket.connected) {
+            Message
+                .find({ to: payload.to, from: payload.from }) // Find messages only on this room
+                .sort({ created: -1 }) // Sort newest messages first
+                .limit(25) // Limit to 25 first results
+                .exec(
+                    (error: any, messages: IMessage[]) => {
+                        for (let message of messages.reverse()) {
+                            this.socket.emit(MESSAGE_ACTIONS.CREATE_MESSAGE, message);
+                        }
+                    }
+                );
+                Message
+                .find({ to: payload.from, from: payload.to }) // Find messages only on this room
+                .sort({ created: -1 }) // Sort newest messages first
+                .limit(25) // Limit to 25 first results
+                .exec(
                     (error: any, messages: IMessage[]) => {
                         for (let message of messages.reverse()) {
                             this.socket.emit(MESSAGE_ACTIONS.CREATE_MESSAGE, message);

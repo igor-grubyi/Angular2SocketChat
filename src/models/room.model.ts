@@ -4,6 +4,7 @@ import { IUser } from "./user.model";
 export interface IRoom {
     name: string;
     users: IUser[];
+    isDirect: boolean;
     created: Date;
 }
 
@@ -14,6 +15,7 @@ export var RoomSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    isDirect: Boolean,
     users: Array,
     created: Date
 });

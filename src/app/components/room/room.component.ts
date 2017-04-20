@@ -53,7 +53,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     });
     this.messagesService.clearMessagesList();
-    this.messagesService.loadMessagesForRoom(this.room.name);
+    this.loadMessages();
   }
 
   // After view initialized, focus on chat message text input
@@ -68,11 +68,26 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       }
   }
 
+  loadMessages() {
+    if(this.room.isDirect) {
+      this.messagesService.loadDirectUserMessages(this.userService.user.nickname, this.room.name);
+    }
+    else {
+      this.messagesService.loadMessagesForRoom(this.room.name);
+    }
+  }
+
   // Send chat message, and reset message text input
   send(): void {
-    this.messagesService.sendMessageToRoom(this.userService.user.nickname, this.message, this.room.name);
+    if(this.room.isDirect) {
+      this.messagesService.sendDirectMessage(this.userService.user.nickname, this.message, this.room.name, this.room.name);
+    }
+    else {
+      this.messagesService.sendMessageToRoom(this.userService.user.nickname, this.message, this.room.name);
+    }
     this.message = "";
   }
+
 
   // Leave room gracefully
   leave(): void {

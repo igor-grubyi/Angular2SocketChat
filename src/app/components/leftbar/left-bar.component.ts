@@ -5,6 +5,7 @@ import {
 
 import { RoomService } from "../../services/room.service";
 import { UserService } from "../../services/user.service";
+import { MessagesService } from "../../services/messages.service";
 
 import {
     IRoom, IUser
@@ -29,7 +30,10 @@ export class LeftBarComponent {
     showDirect: boolean = true;
     user: IUser = {nickname: ""};
 
-    constructor(private zone: NgZone, public roomService: RoomService, public userService: UserService) {}
+    constructor(private zone: NgZone, 
+    public roomService: RoomService,
+    public messagesService: MessagesService,
+    public userService: UserService) {}
 
     // Handle keypress event, for saving nickname
     ngOnInit(): void {
@@ -68,9 +72,13 @@ export class LeftBarComponent {
     }
 
     // Create room, when Create-button is pressed and empty newRoom text input
-    create(): void {
-        this.roomService.create(this.newRoom);
+    createRoom(): void {
+        this.roomService.createRoom(this.newRoom);
         this.newRoom = "";
+    }
+
+    createDirectChat(name: string): void {
+        this.roomService.createDirectChat(name);
     }
 
     // Remove room, when Remove-button is pressed and unset selected room
@@ -82,7 +90,7 @@ export class LeftBarComponent {
     // Handle keypress event (for creating a new room)
     eventHandler(event: KeyboardEvent): void {
         if (event.key === "Enter") {
-            this.create();
+            this.createRoom();
         }
     }
 }

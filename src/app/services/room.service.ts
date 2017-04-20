@@ -47,8 +47,10 @@ export class RoomService {
                     case ROOM_ACTIONS.UPDATE_ROOM:
                         this.store.dispatch({type: ROOM_ACTIONS.UPDATE_ROOM, payload: room});
                         break;
-                    default:
+                    case ROOM_ACTIONS.ADD_ROOM:
                         this.store.dispatch({type: ROOM_ACTIONS.ADD_ROOM, payload: room});
+                        break;
+                    default:
                         break;
                 }
             },
@@ -58,11 +60,14 @@ export class RoomService {
 
     // Join room
     join(room: IRoom): void {
+        this.rooms.subscribe((rooms)=>{
+            console.log(rooms.indexOf(room))
+        })
         this.store.dispatch({type: ROOM_ACTIONS.SET_CURRENT_ROOM, payload: room});
     }
 
     // Leave room
-    leave(room: IRoom) {
+    leave(room: IRoom): void {
         // First remove the room from user joined rooms
         for (var i = 0; i < this.userService.rooms.length; i++) {
             let room = this.userService.rooms[i];
@@ -72,13 +77,33 @@ export class RoomService {
         }
     }
 
+    clearRoomsList() {
+      this.store.dispatch({type: ROOM_ACTIONS.RESET_ROOMS});
+    }
+
     // Create room
-    create(name: string) {
-        this.socketService.emitAction(ROOM_ACTIONS.CREATE_ROOM, name);
+    createRoom(name: string): void {
+        this.socketService.emitAction(ROOM_ACTIONS.CREATE_ROOM, {name: name, isDirect: false});
+    }
+
+    createDirectChat(name: string): void {
+        let room = this.findRoom(name);
+        if(room) {
+            this.join(room);
+        }
+        else {
+            this.socketService.emitAction(ROOM_ACTIONS.CREATE_ROOM, {name: name, isDirect: true});
+        }
+    }
+
+    findRoom(name: string): IRoom | undefined {
+        let room;
+        this.rooms.subscribe((rooms)=>room = rooms.find(el=>el.name == name));
+        return room || false;
     }
 
     // Remove room
-    remove(name: string) {
+    remove(name: string): void {
         // Send signal to remove the room
         this.socketService.emitAction(ROOM_ACTIONS.REMOVE_ROOM, name);
     }

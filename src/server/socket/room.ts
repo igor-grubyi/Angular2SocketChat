@@ -22,7 +22,7 @@ export class RoomSocket {
     // Add signal
     private listen(): void {
         this.socket.on("disconnect", () => this.disconnect());
-        this.socket.on(ROOM_ACTIONS.CREATE_ROOM, (name: string) => this.create(name));
+        this.socket.on(ROOM_ACTIONS.CREATE_ROOM, (payload) => this.create(payload.name, payload.isDirect));
         this.socket.on(ROOM_ACTIONS.REMOVE_ROOM, (name: string) => this.remove(name));
         this.socket.on("list", () => this.list());
     }
@@ -42,12 +42,14 @@ export class RoomSocket {
     }
 
     // Create a room
-    private create(name: string): void {
+    private create(name: string, isDirect: boolean): void {
         Room.create({
             name: name,
             created: new Date(),
+            isDirect: isDirect,
             messages: []
         }, (error: any, room: IRoom) => {
+            console.log(error, room)
             if (!error && room) {
                 this.createRoom(room);
             }
