@@ -113,7 +113,7 @@ gulp.task('webpack:server-dev', done => {
     webpack(conf).watch(100, (error, stats) => {
         if (error) throw new gulpUtil.PluginError('webpack:server-dev', error);
         gulpUtil.log(stats.toString(conf.stats));
-        done();node 
+        done();
     });
 });
 
